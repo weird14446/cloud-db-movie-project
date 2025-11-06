@@ -941,3 +941,46 @@ body {
   gap: 0.75rem;
   margin-top: 1.5rem;
 }
+
+/* 영화 카드 헤더 (제목 + 연도 + 좋아요 버튼 정렬) */
+.movie-card__header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+/* 좋아요 버튼 공통 */
+.like-button {
+  border-radius: 999px;
+  padding: 6px 10px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.9);
+  color: #f9fafb;
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: background-color 0.16s ease, border-color 0.16s ease,
+    transform 0.1s ease, box-shadow 0.16s ease;
+}
+
+.like-button__icon {
+  font-size: 0.9rem;
+}
+
+/* 좋아요 ON 상태 */
+.like-button--active {
+  border-color: #fb7185;
+  background: rgba(248, 113, 113, 0.14);
+  color: #fecaca;
+  box-shadow: 0 10px 25px rgba(248, 113, 113, 0.35);
+}
+
+/* 상세 모달 헤더 오른쪽 버튼 정렬 */
+.movie-detail__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

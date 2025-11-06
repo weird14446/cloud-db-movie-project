@@ -7,6 +7,8 @@ type MovieDetailModalProps = {
     movie: Movie;
     reviews: Review[];
     user: User | null;
+    isLiked: boolean;
+    onToggleLike: () => void;
     onClose: () => void;
     onAddReview: (input: { rating: number; content: string }) => void;
 };
@@ -49,6 +51,8 @@ const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
     movie,
     reviews,
     user,
+    isLiked,
+    onToggleLike,
     onClose,
     onAddReview,
 }) => {
@@ -82,13 +86,28 @@ const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                         {movie.title}{" "}
                         <span className="movie-detail__year">({movie.year})</span>
                     </h1>
-                    <button
-                        type="button"
-                        className="btn btn--ghost btn--sm"
-                        onClick={onClose}
-                    >
-                        닫기
-                    </button>
+                    <div className="movie-detail__header-actions">
+                        <button
+                            type="button"
+                            className={
+                                "like-button btn--sm" +
+                                (isLiked ? " like-button--active" : "")
+                            }
+                            onClick={onToggleLike}
+                        >
+                            <span className="like-button__icon">
+                                {isLiked ? "♥" : "♡"}
+                            </span>
+                            <span>좋아요</span>
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn--ghost btn--sm"
+                            onClick={onClose}
+                        >
+                            닫기
+                        </button>
+                    </div>
                 </div>
 
                 <div className="movie-detail__layout">
@@ -181,7 +200,9 @@ const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                                             <div className="cast-card__info">
                                                 <div className="cast-card__name">{c.name}</div>
                                                 {c.character && (
-                                                    <div className="cast-card__role">{c.character}</div>
+                                                    <div className="cast-card__role">
+                                                        {c.character}
+                                                    </div>
                                                 )}
                                             </div>
                                         </div>
@@ -208,7 +229,9 @@ const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                                                     ★ {r.rating}/10
                                                 </span>
                                             </div>
-                                            <p className="review-item__content">{r.content}</p>
+                                            <p className="review-item__content">
+                                                {r.content}
+                                            </p>
                                         </div>
                                     ))}
                                 </div>
@@ -251,7 +274,10 @@ const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                                             placeholder="영화에 대한 느낌을 자유롭게 적어주세요."
                                         />
                                     </label>
-                                    <button type="submit" className="btn btn--primary btn--full">
+                                    <button
+                                        type="submit"
+                                        className="btn btn--primary btn--full"
+                                    >
                                         리뷰 남기기
                                     </button>
                                 </form>

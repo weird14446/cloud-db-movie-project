@@ -1,3 +1,4 @@
+// src/screens/MovieScreen.tsx
 import React, { useMemo, useState } from "react";
 import type { User, Genre, Movie } from "../types";
 
@@ -10,6 +11,10 @@ type MovieScreenProps = {
     onOpenGenres: () => void;
     onLogout: () => void;
     onOpenMovie: (movie: Movie) => void;
+
+    // 👍 좋아요 관련
+    isLiked: (movieId: number) => boolean;
+    onToggleLike: (movie: Movie) => void;
 };
 
 const MovieScreen: React.FC<MovieScreenProps> = ({
@@ -21,6 +26,8 @@ const MovieScreen: React.FC<MovieScreenProps> = ({
     onOpenGenres,
     onLogout,
     onOpenMovie,
+    isLiked,
+    onToggleLike,
 }) => {
     // 🔎 검색어 상태
     const [searchQuery, setSearchQuery] = useState<string>("");
@@ -154,10 +161,17 @@ const MovieScreen: React.FC<MovieScreenProps> = ({
                 <section className="movie-grid">
                     {visibleMovies.map((m) => (
                         <article key={m.id} className="movie-card movie-card--compact">
-                            <button
-                                type="button"
+                            <div
                                 className="movie-card__clickable"
+                                role="button"
+                                tabIndex={0}
                                 onClick={() => onOpenMovie(m)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        e.preventDefault();
+                                        onOpenMovie(m);
+                                    }
+                                }}
                             >
                                 <div className="movie-card__poster">
                                     {m.posterUrl ? (
@@ -167,8 +181,28 @@ const MovieScreen: React.FC<MovieScreenProps> = ({
                                     )}
                                 </div>
                                 <div className="movie-card__body">
-                                    <h3 className="movie-card__title">{m.title}</h3>
-                                    <p className="movie-card__year">{m.year}</p>
+                                    <div className="movie-card__header-row">
+                                        <div>
+                                            <h3 className="movie-card__title">{m.title}</h3>
+                                            <p className="movie-card__year">{m.year}</p>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            className={
+                                                "like-button" +
+                                                (isLiked(m.id) ? " like-button--active" : "")
+                                            }
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // 상세 페이지 열리는 클릭 막기
+                                                onToggleLike(m);
+                                            }}
+                                        >
+                                            <span className="like-button__icon">
+                                                {isLiked(m.id) ? "♥" : "♡"}
+                                            </span>
+                                        </button>
+                                    </div>
+
                                     <div className="movie-card__genres">
                                         {m.genres.map((g) => (
                                             <span key={g} className="pill pill--soft">
@@ -177,7 +211,7 @@ const MovieScreen: React.FC<MovieScreenProps> = ({
                                         ))}
                                     </div>
                                 </div>
-                            </button>
+                            </div>
                         </article>
                     ))}
 
