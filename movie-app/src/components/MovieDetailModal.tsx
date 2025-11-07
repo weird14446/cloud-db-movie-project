@@ -1,15 +1,17 @@
 // src/components/MovieDetailModal.tsx
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import type { Movie, Review, User } from "../types";
 
 type MovieDetailModalProps = {
     movie: Movie;
     reviews: Review[];
     user: User | null;
-    liked: boolean;
     onClose: () => void;
     onAddReview: (input: { rating: number; content: string }) => void;
+
+    // ❤️ 상세 모달에서도 좋아요 사용
+    isLiked: boolean;
     onToggleLike: () => void;
 };
 
@@ -51,14 +53,21 @@ const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
     movie,
     reviews,
     user,
-    liked,
     onClose,
     onAddReview,
+    isLiked,
     onToggleLike,
 }) => {
     const [showTrailer, setShowTrailer] = useState(false);
     const [rating, setRating] = useState<number>(8);
     const [content, setContent] = useState("");
+
+    // 리뷰 평균 평점
+    const avgRating = useMemo(() => {
+        if (!reviews || reviews.length === 0) return null;
+        const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
+        return sum / reviews.length;
+    }, [reviews]);
 
     const trailerSrc =
         movie.trailerKey && movie.trailerSite === "Vimeo"
@@ -82,24 +91,35 @@ const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
         <div className="modal">
             <div className="card card--glass modal-card movie-detail">
                 <div className="movie-detail__header">
-                    <div>
-                        <h1 className="movie-detail__title">
-                            {movie.title}{" "}
-                            <span className="movie-detail__year">({movie.year})</span>
-                        </h1>
-                    </div>
-                    <div className="movie-detail__header-actions">
+                    <h1 className="movie-detail__title">
+                        {movie.title}{" "}
+                        <span className="movie-detail__year">({movie.year})</span>
+                    </h1>
+
+                    <div className="movie-detail__header-right">
+                        {avgRating !== null && (
+                            <div className="movie-detail__avg-pill">
+                                ★ {avgRating.toFixed(1)}
+                            </div>
+                        )}
+
                         <button
                             type="button"
                             className={
-                                liked
-                                    ? "like-button like-button--active"
-                                    : "like-button"
+                                "btn btn--ghost btn--sm movie-detail__like-btn" +
+                                (isLiked ? " movie-detail__like-btn--active" : "")
                             }
-                            onClick={onToggleLike}
+                            onClick={() => {
+                                if (!user) {
+                                    alert("좋아요를 사용하려면 로그인 해주세요.");
+                                    return;
+                                }
+                                onToggleLike();
+                            }}
                         >
-                            {liked ? "♥ 좋아요" : "♡ 좋아요"}
+                            {isLiked ? "♥ 좋아요" : "♡ 좋아요"}
                         </button>
+
                         <button
                             type="button"
                             className="btn btn--ghost btn--sm"
@@ -229,7 +249,9 @@ const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                                                     ★ {r.rating}/10
                                                 </span>
                                             </div>
-                                            <p className="review-item__content">{r.content}</p>
+                                            <p className="review-item__content">
+                                                {r.content}
+                                            </p>
                                         </div>
                                     ))}
                                 </div>
@@ -239,7 +261,7 @@ const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                                 </p>
                             )}
 
-                            {/* ✅ 로그인한 유저만 리뷰 작성 가능 */}
+                            {/* 로그인한 유저만 리뷰 작성 가능 */}
                             {user ? (
                                 <form className="review-form" onSubmit={handleSubmitReview}>
                                     <div className="review-form__row">
