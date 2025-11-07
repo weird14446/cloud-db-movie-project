@@ -984,3 +984,50 @@ body {
   align-items: center;
   gap: 0.5rem;
 }
+
+/* ===== 좋아요 필터 탭 & 상단 바 정렬 ===== */
+
+/* 오른쪽 상단: 개수/좋아요/탭 묶음 */
+.movie-main__view-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* 좋아요 개수 pill 살짝 강조 */
+.movie-main__likes-pill {
+  gap: 0.25rem;
+}
+
+/* 보기 모드 탭 (전체 / 좋아요한 영화) */
+.movie-main__view-tabs {
+  display: inline-flex;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.85);
+  padding: 2px;
+  gap: 2px;
+}
+
+.view-tab {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #e5e7eb;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.view-tab--active {
+  background: linear-gradient(135deg, #22c55e, #4ade80);
+  color: #020617;
+}
+
+.view-tab:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
