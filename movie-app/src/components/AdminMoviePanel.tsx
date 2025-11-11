@@ -64,7 +64,7 @@ function mapMovieToForm(movie: Movie, knownGenres: Set<string>): FormState {
     const budget = movie.budget ?? null;
     const revenue = movie.revenue ?? null;
     const streaming = (movie.streamingPlatforms ?? []).filter(
-        (platform): platform is string => typeof platform === "string"
+        (platform): platform is StreamingPlatform => typeof platform === "string"
     );
 
     return {

@@ -121,6 +121,7 @@ const MovieScreen: React.FC<MovieScreenProps> = ({
     // 좋아요 한 영화만 보기
     const [showLikedOnly, setShowLikedOnly] = useState<boolean>(false);
     const [showPopularOnly, setShowPopularOnly] = useState<boolean>(false);
+    const [showReviewedOnly, setShowReviewedOnly] = useState<boolean>(false);
 
     // 개봉 상태 필터
     const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -136,6 +137,9 @@ const MovieScreen: React.FC<MovieScreenProps> = ({
         StreamingPlatform | "all"
     >("all");
 
+    // 감독 필터
+    const [directorFilter, setDirectorFilter] = useState<string>("all");
+
     // 스트리밍 서비스 옵션 (데이터에서 자동 추출)
     const platformOptions = useMemo<StreamingPlatform[]>(() => {
         const set = new Set<StreamingPlatform>();
@@ -144,6 +148,29 @@ const MovieScreen: React.FC<MovieScreenProps> = ({
         );
         return Array.from(set).sort();
     }, [movies]);
+
+    // 감독 옵션 (데이터에서 자동 추출)
+    const directorOptions = useMemo<string[]>(() => {
+        const set = new Set<string>();
+        movies.forEach((m) => {
+            if (m.director) {
+                set.add(m.director);
+            }
+        });
+        return Array.from(set).sort();
+    }, [movies]);
+
+    // 현재 사용자가 리뷰를 남긴 영화 ID 목록
+    const reviewedMovieIds = useMemo<number[]>(() => {
+        if (!user) return [];
+
+        return Object.keys(reviewsByMovie)
+            .map((id) => parseInt(id, 10))
+            .filter((id) => {
+                const reviews = reviewsByMovie[id] ?? [];
+                return reviews.some((review) => review.userName === user.name);
+            });
+    }, [reviewsByMovie, user]);
 
     // 영화별 평균 평점(카드용)
     const avgRatingByMovie = useMemo(() => {
@@ -317,6 +344,10 @@ const MovieScreen: React.FC<MovieScreenProps> = ({
             list = list.filter((m) => likedMovieIds.includes(m.id));
         }
 
+        if (showReviewedOnly) {
+            list = list.filter((m) => reviewedMovieIds.includes(m.id));
+        }
+
         if (statusFilter !== "all") {
             list = list.filter((m) => m.status === statusFilter);
         }
@@ -325,6 +356,10 @@ const MovieScreen: React.FC<MovieScreenProps> = ({
             list = list.filter((m) =>
                 (m.streamingPlatforms ?? []).includes(platformFilter)
             );
+        }
+
+        if (directorFilter !== "all") {
+            list = list.filter((m) => m.director === directorFilter);
         }
 
         if (showPopularOnly) {
@@ -345,8 +380,11 @@ const MovieScreen: React.FC<MovieScreenProps> = ({
         searchQuery,
         showLikedOnly,
         likedMovieIds,
+        showReviewedOnly,
+        reviewedMovieIds,
         statusFilter,
         platformFilter,
+        directorFilter,
         showPopularOnly,
         ratingFilter,
         displayRatingByMovie,
@@ -513,6 +551,16 @@ const MovieScreen: React.FC<MovieScreenProps> = ({
                                     />
                                     <span>인기 영화만 보기</span>
                                 </label>
+                                <label className="movie-main__toggle">
+                                    <input
+                                        type="checkbox"
+                                        checked={showReviewedOnly}
+                                        onChange={(e) =>
+                                            setShowReviewedOnly(e.target.checked)
+                                        }
+                                    />
+                                    <span>리뷰 남긴 영화만 보기</span>
+                                </label>
                             </div>
                         </div>
 
@@ -573,6 +621,22 @@ const MovieScreen: React.FC<MovieScreenProps> = ({
                                         {platformOptions.map((p) => (
                                             <option key={p} value={p}>
                                                 {p}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                    <select
+                                        className="form-input"
+                                        style={{ maxWidth: 180 }}
+                                        value={directorFilter}
+                                        onChange={(e) =>
+                                            setDirectorFilter(e.target.value)
+                                        }
+                                    >
+                                        <option value="all">모든 감독</option>
+                                        {directorOptions.map((director) => (
+                                            <option key={director} value={director}>
+                                                {director}
                                             </option>
                                         ))}
                                     </select>
