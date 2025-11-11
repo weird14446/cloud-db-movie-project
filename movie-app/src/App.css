@@ -15,13 +15,69 @@ body,
   width: 100%;
 }
 
+:root {
+  --color-page-bg: radial-gradient(circle at top, #1f2937 0, #020617 60%);
+  --color-text-primary: #e5e7eb;
+  --color-text-muted: #9ca3af;
+  --surface-card-bg: rgba(15, 23, 42, 0.85);
+  --surface-card-border: rgba(148, 163, 184, 0.3);
+  --surface-panel-bg: rgba(15, 23, 42, 0.82);
+  --surface-panel-border: rgba(148, 163, 184, 0.35);
+  --surface-chip-bg: rgba(30, 41, 59, 0.6);
+  --surface-chip-border: rgba(148, 163, 184, 0.35);
+  --surface-input-bg: rgba(15, 23, 42, 0.7);
+  --surface-input-border: rgba(148, 163, 184, 0.4);
+  --surface-input-placeholder: #6b7280;
+  --reco-gradient-personalized: linear-gradient(135deg, rgba(24, 24, 37, 0.95), rgba(76, 29, 149, 0.9));
+  --reco-gradient-trending: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(13, 71, 161, 0.88));
+  --reco-overlay: radial-gradient(circle at 10% 20%, rgba(244, 114, 182, 0.4), transparent 55%),
+    radial-gradient(circle at 85% 80%, rgba(56, 189, 248, 0.35), transparent 60%);
+  --reco-status-color: #fde68a;
+  --cta-card-bg: rgba(109, 40, 217, 0.18);
+  --cta-card-border: rgba(192, 132, 252, 0.35);
+  --cta-text-color: #f5f3ff;
+  --reco-card-border: rgba(59, 130, 246, 0.25);
+  --reco-card-border-active: rgba(236, 72, 153, 0.7);
+  --reco-card-bg: rgba(15, 23, 42, 0.85);
+  --reco-card-badge-bg: rgba(24, 24, 37, 0.75);
+  --reco-card-badge-color: #fce7f3;
+}
+
+body.theme-light {
+  --color-page-bg: radial-gradient(circle at top, #f8fafc 0, #e2e8f0 70%);
+  --color-text-primary: #0f172a;
+  --color-text-muted: #475569;
+  --surface-card-bg: rgba(255, 255, 255, 0.95);
+  --surface-card-border: rgba(15, 23, 42, 0.12);
+  --surface-panel-bg: rgba(255, 255, 255, 0.92);
+  --surface-panel-border: rgba(15, 23, 42, 0.12);
+  --surface-chip-bg: rgba(15, 23, 42, 0.05);
+  --surface-chip-border: rgba(15, 23, 42, 0.12);
+  --surface-input-bg: rgba(255, 255, 255, 0.9);
+  --surface-input-border: rgba(15, 23, 42, 0.15);
+  --surface-input-placeholder: #94a3b8;
+  --reco-gradient-personalized: linear-gradient(135deg, #fdf2f8, #e0f2fe);
+  --reco-gradient-trending: linear-gradient(135deg, #e0f2fe, #fefae0);
+  --reco-overlay: radial-gradient(circle at 10% 20%, rgba(236, 72, 153, 0.3), transparent 55%),
+    radial-gradient(circle at 85% 80%, rgba(56, 189, 248, 0.25), transparent 60%);
+  --reco-status-color: #ea580c;
+  --cta-card-bg: rgba(59, 130, 246, 0.08);
+  --cta-card-border: rgba(59, 130, 246, 0.35);
+  --cta-text-color: #0f172a;
+  --reco-card-border: rgba(15, 23, 42, 0.1);
+  --reco-card-border-active: rgba(99, 102, 241, 0.9);
+  --reco-card-bg: rgba(255, 255, 255, 0.96);
+  --reco-card-badge-bg: rgba(15, 23, 42, 0.06);
+  --reco-card-badge-color: #0f172a;
+}
+
 /* ========= 베이스 ========= */
 
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     sans-serif;
-  background: radial-gradient(circle at top, #1f2937 0, #020617 60%);
-  color: #e5e7eb;
+  background: var(--color-page-bg);
+  color: var(--color-text-primary);
 }
 
 /* 항상 화면 중앙 정렬 */
@@ -49,17 +105,17 @@ body {
 .card {
   width: 100%;
   max-width: 480px;
-  background: rgba(15, 23, 42, 0.85);
+  background: var(--surface-card-bg);
   border-radius: 24px;
   padding: 24px 24px 20px;
-  border: 1px solid rgba(148, 163, 184, 0.3);
+  border: 1px solid var(--surface-card-border);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(16px);
 }
 
 .card--glass {
   /* 필요하면 조금 더 투명하게 */
-  background: rgba(15, 23, 42, 0.82);
+  background: var(--surface-panel-bg);
 }
 
 .login-card {
@@ -74,13 +130,13 @@ body {
   margin: 16px 0 4px;
   font-size: 22px;
   font-weight: 700;
-  color: #f9fafb;
+  color: var(--color-text-primary);
 }
 
 .card-subtitle {
   margin: 0 0 16px;
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--color-text-muted);
 }
 
 .card-header {
@@ -190,9 +246,9 @@ body {
 .form-input {
   border-radius: 12px;
   padding: 10px 12px;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  background: rgba(15, 23, 42, 0.7);
-  color: #e5e7eb;
+  border: 1px solid var(--surface-input-border);
+  background: var(--surface-input-bg);
+  color: var(--color-text-primary);
   font-size: 14px;
   outline: none;
   transition: border-color 0.16s ease, box-shadow 0.16s ease,
@@ -206,13 +262,13 @@ body {
 }
 
 .form-input::placeholder {
-  color: #6b7280;
+  color: var(--surface-input-placeholder);
 }
 
 .form-input:focus {
   border-color: #22c55e;
   box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.4);
-  background: rgba(15, 23, 42, 0.95);
+  background: var(--surface-input-bg);
 }
 
 .form-hint {
@@ -478,6 +534,11 @@ body {
   flex-direction: column;
   gap: 0.5rem;
   width: 100%;
+  background: var(--surface-panel-bg);
+  border: 1px solid var(--surface-panel-border);
+  border-radius: 16px;
+  padding: 0.75rem;
+  color: var(--color-text-primary);
 }
 
 .movie-main__filter-controls {
@@ -494,6 +555,9 @@ body {
 .movie-main__filter-select {
   flex: 1 1 150px;
   min-width: 140px;
+  background: var(--surface-input-bg);
+  border: 1px solid var(--surface-input-border);
+  color: var(--color-text-primary);
 }
 
 @media (max-width: 640px) {
@@ -659,16 +723,16 @@ body {
   border-radius: 30px;
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(148, 163, 184, 0.35);
+  border: 1px solid var(--surface-panel-border);
   box-shadow: 0 25px 60px rgba(2, 6, 23, 0.55);
+  color: var(--color-text-primary);
 }
 
 .movie-reco::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 10% 20%, rgba(244, 114, 182, 0.4), transparent 55%),
-    radial-gradient(circle at 85% 80%, rgba(56, 189, 248, 0.35), transparent 60%);
+  background: var(--reco-overlay);
   opacity: 0.85;
   pointer-events: none;
 }
@@ -679,11 +743,11 @@ body {
 }
 
 .movie-reco--personalized {
-  background: linear-gradient(135deg, rgba(24, 24, 37, 0.95), rgba(76, 29, 149, 0.9));
+  background: var(--reco-gradient-personalized);
 }
 
 .movie-reco--trending {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(13, 71, 161, 0.88));
+  background: var(--reco-gradient-trending);
 }
 
 .movie-reco__hero {
@@ -709,7 +773,7 @@ body {
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #fbcfe8;
+  color: var(--color-text-muted);
 }
 
 .movie-reco__title {
@@ -720,7 +784,7 @@ body {
 
 .movie-reco__subtitle {
   margin: 0;
-  color: rgba(226, 232, 240, 0.9);
+  color: var(--color-text-muted);
   line-height: 1.5;
 }
 
@@ -735,12 +799,12 @@ body {
   display: block;
   font-size: 0.75rem;
   letter-spacing: 0.04em;
-  color: rgba(148, 163, 184, 0.9);
+  color: var(--color-text-muted);
 }
 
 .movie-reco__status strong {
   font-size: 1.25rem;
-  color: #fde68a;
+  color: var(--reco-status-color);
   font-weight: 600;
 }
 
@@ -752,8 +816,8 @@ body {
   height: 100%;
   padding: 1.2rem 1.3rem;
   border-radius: 20px;
-  background: rgba(109, 40, 217, 0.18);
-  border: 1px solid rgba(192, 132, 252, 0.35);
+  background: var(--cta-card-bg);
+  border: 1px solid var(--cta-card-border);
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
@@ -764,12 +828,12 @@ body {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #ddd6fe;
+  color: var(--cta-text-color);
 }
 
 .movie-reco__cta-card p {
   margin: 0;
-  color: #f5f3ff;
+  color: var(--cta-text-color);
   line-height: 1.4;
 }
 
@@ -781,8 +845,8 @@ body {
 }
 
 .movie-reco__directors--chips span {
-  background: rgba(76, 29, 149, 0.35);
-  border: 1px solid rgba(192, 132, 252, 0.4);
+  background: var(--surface-chip-bg);
+  border: 1px solid var(--surface-chip-border);
 }
 
 .movie-reco__list {
@@ -800,10 +864,10 @@ body {
   grid-column: 1 / -1;
   padding: 1rem;
   border-radius: 18px;
-  background: rgba(15, 23, 42, 0.7);
+  background: var(--surface-panel-bg);
   text-align: center;
-  color: #e2e8f0;
-  border: 1px dashed rgba(148, 163, 184, 0.4);
+  color: var(--color-text-primary);
+  border: 1px dashed var(--surface-panel-border);
 }
 
 .movie-reco__empty--error {
@@ -812,9 +876,9 @@ body {
 }
 
 .movie-reco-card {
-  border: 1px solid rgba(59, 130, 246, 0.25);
+  border: 1px solid var(--reco-card-border);
   border-radius: 20px;
-  background: rgba(15, 23, 42, 0.85);
+  background: var(--reco-card-bg);
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -839,7 +903,7 @@ body {
 
 .movie-reco-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(236, 72, 153, 0.7);
+  border-color: var(--reco-card-border-active);
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
 }
 
@@ -862,12 +926,12 @@ body {
   position: absolute;
   top: 12px;
   left: 12px;
-  background: rgba(24, 24, 37, 0.75);
-  color: #fce7f3;
+  background: var(--reco-card-badge-bg);
+  color: var(--reco-card-badge-color);
   font-size: 0.7rem;
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
-  border: 1px solid rgba(251, 207, 232, 0.4);
+  border: 1px solid var(--surface-chip-border);
 }
 
 .movie-reco-card__body {
@@ -879,13 +943,13 @@ body {
 
 .movie-reco-card__meta {
   font-size: 0.78rem;
-  color: #a1a1aa;
+  color: var(--color-text-muted);
 }
 
 .movie-reco-card__title {
   margin: 0;
   font-size: 1.05rem;
-  color: #f8fafc;
+  color: var(--color-text-primary);
 }
 
 .movie-reco-card__genres {
@@ -897,7 +961,7 @@ body {
 .movie-reco-card__genres span {
   font-size: 0.65rem;
   letter-spacing: 0.05em;
-  color: #cbd5f5;
+  color: var(--color-text-muted);
 }
 
 .movie-reco-card__tags {
