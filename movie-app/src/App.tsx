@@ -7,6 +7,7 @@ import SignupScreen from "./screens/SignupScreen";
 import GenreScreen from "./screens/GenreScreen";
 import MovieScreen from "./screens/MovieScreen";
 import MovieDetailModal from "./components/MovieDetailModal";
+import MyPageScreen from "./screens/MyPageScreen";
 import type { User, Genre, Movie, Review, DirectorScore } from "./types";
 import { fetchInitialData } from "./api/dataService";
 import { checkDbHealth } from "./api/health";
@@ -55,6 +56,7 @@ const App: React.FC = () => {
     const [showLogin, setShowLogin] = useState(false);
     const [showSignup, setShowSignup] = useState(false);
     const [showGenres, setShowGenres] = useState(false);
+    const [activeView, setActiveView] = useState<"home" | "mypage">("home");
     const [activeMovie, setActiveMovie] = useState<Movie | null>(null);
     const [dataLoading, setDataLoading] = useState<boolean>(true);
     const [dataError, setDataError] = useState<string | null>(null);
@@ -77,6 +79,7 @@ const App: React.FC = () => {
 
     const modalOpen =
         showLogin || showSignup || showGenres || activeMovie !== null;
+    const isHomeView = activeView === "home";
 
     const recommendedMovies = useMemo(() => {
         if (!recommendationScores.length || !movies.length) {
@@ -87,6 +90,10 @@ const App: React.FC = () => {
             .map(({ movieId }) => movieMap.get(movieId))
             .filter((movie): movie is Movie => Boolean(movie));
     }, [recommendationScores, movies]);
+    const likedMoviesDetailed = useMemo(
+        () => movies.filter((movie) => likedMovieIds.includes(movie.id)),
+        [movies, likedMovieIds]
+    );
 
     useEffect(() => {
         if (activeMovie) {
@@ -277,6 +284,14 @@ const App: React.FC = () => {
         setLikedMovieIds([]);
         window.location.reload();
     }
+
+    const handleOpenMyPage = (): void => {
+        setActiveView("mypage");
+    };
+
+    const handleCloseMyPage = (): void => {
+        setActiveView("home");
+    };
 
     function openGenreSelection(): void {
         if (!user) {
@@ -688,39 +703,53 @@ const App: React.FC = () => {
                         : "app-blur-wrapper"
                 }
             >
-                <MovieScreen
-                    user={user}
-                    genres={genres}
-                    selectedGenres={selectedGenres}
-                    movies={movies}
-                    likedMovieIds={likedMovieIds}
-                    onToggleLike={handleToggleLike}
-                    onOpenLogin={() => setShowLogin(true)}
-                    onOpenGenres={openGenreSelection}
-                    onLogout={handleLogout}
-                    onOpenMovie={handleOpenMovie}
-                    reviewsByMovie={reviewsByMovie}
-                    recommendedMovies={recommendedMovies}
-                    directorScores={directorScores}
-                    recommendationsLoading={recommendationsLoading}
-                    recommendationError={recommendationsError}
-                    isLoading={dataLoading}
-                    fetchError={dataError}
-                    onReloadData={loadInitialData}
-                    isDevUser={isDevUser}
-                    onImportData={handleFetchAndStore}
-                    isImportingData={importingData}
-                    onClearData={handleClearData}
-                    isClearingData={clearingData}
-                    onCreateMovie={handleCreateMovie}
-                    onUpdateMovie={handleUpdateMovie}
-                    onDeleteMovie={handleDeleteMovie}
-                    isCreatingMovie={creatingMovie}
-                    isUpdatingMovie={updatingMovie}
-                    isDeletingMovie={deletingMovie}
-                    onRefreshMovies={handleRefreshExistingMovies}
-                    isRefreshingMovies={refreshingMovies}
-                />
+                {isHomeView ? (
+                    <MovieScreen
+                        user={user}
+                        genres={genres}
+                        selectedGenres={selectedGenres}
+                        movies={movies}
+                        likedMovieIds={likedMovieIds}
+                        onToggleLike={handleToggleLike}
+                        onOpenLogin={() => setShowLogin(true)}
+                        onOpenGenres={openGenreSelection}
+                        onOpenMyPage={handleOpenMyPage}
+                        onLogout={handleLogout}
+                        onOpenMovie={handleOpenMovie}
+                        reviewsByMovie={reviewsByMovie}
+                        recommendedMovies={recommendedMovies}
+                        directorScores={directorScores}
+                        recommendationsLoading={recommendationsLoading}
+                        recommendationError={recommendationsError}
+                        isLoading={dataLoading}
+                        fetchError={dataError}
+                        onReloadData={loadInitialData}
+                        isDevUser={isDevUser}
+                        onImportData={handleFetchAndStore}
+                        isImportingData={importingData}
+                        onClearData={handleClearData}
+                        isClearingData={clearingData}
+                        onCreateMovie={handleCreateMovie}
+                        onUpdateMovie={handleUpdateMovie}
+                        onDeleteMovie={handleDeleteMovie}
+                        isCreatingMovie={creatingMovie}
+                        isUpdatingMovie={updatingMovie}
+                        isDeletingMovie={deletingMovie}
+                        onRefreshMovies={handleRefreshExistingMovies}
+                        isRefreshingMovies={refreshingMovies}
+                    />
+                ) : (
+                    <MyPageScreen
+                        user={user}
+                        likedMovies={likedMoviesDetailed}
+                        selectedGenres={selectedGenres}
+                        genres={genres}
+                        onClose={handleCloseMyPage}
+                        onOpenGenres={openGenreSelection}
+                        onLogout={handleLogout}
+                        onOpenLogin={() => setShowLogin(true)}
+                    />
+                )}
             </div>
 
             {modalOpen && <div className="modal-backdrop" />}

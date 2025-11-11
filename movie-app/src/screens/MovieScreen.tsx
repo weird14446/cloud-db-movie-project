@@ -21,6 +21,7 @@ type MovieScreenProps = {
     onToggleLike: (movieId: number) => void;
     onOpenLogin: () => void;
     onOpenGenres: () => void;
+    onOpenMyPage: () => void;
     onLogout: () => void;
     onOpenMovie: (movie: Movie) => void;
     reviewsByMovie: Record<number, Review[]>;
@@ -91,6 +92,7 @@ const MovieScreen: React.FC<MovieScreenProps> = ({
     onToggleLike,
     onOpenLogin,
     onOpenGenres,
+    onOpenMyPage,
     onLogout,
     onOpenMovie,
     reviewsByMovie,
@@ -451,6 +453,12 @@ const MovieScreen: React.FC<MovieScreenProps> = ({
                                 onClick={onOpenGenres}
                             >
                                 선호 장르 선택
+                            </button>
+                            <button
+                                className="btn btn--ghost btn--sm"
+                                onClick={onOpenMyPage}
+                            >
+                                마이페이지
                             </button>
                             <button
                                 className="btn btn--ghost btn--sm"
