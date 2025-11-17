@@ -1,0 +1,42 @@
+services:
+  devcontainer:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+    environment:
+      DB_HOST: db
+      DB_USER: movieapp
+      DB_PASSWORD: moviepass
+      DB_NAME: movieapp
+      TMDB_API_KEY: ${TMDB_API_KEY:-}
+      ADMIN_IMPORT_TOKEN: ${ADMIN_IMPORT_TOKEN:-root-import}
+    ports:
+      - "3000:3000"
+      - "5173:5173"
+      - "8080:8080"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    command: ["mysqld", "--default-authentication-plugin=mysql_native_password"]
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: movieapp
+      MYSQL_USER: movieapp
+      MYSQL_PASSWORD: moviepass
+    ports:
+      - "3307:3306"
+    volumes:
+      - dev_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  dev_db_data:

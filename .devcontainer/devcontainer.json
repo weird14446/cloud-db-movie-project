@@ -1,0 +1,25 @@
+{
+  "name": "movie-project-dev",
+  "dockerComposeFile": [
+    "docker-compose.dev.yml"
+  ],
+  "service": "devcontainer",
+  "workspaceFolder": "/workspace",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "forwardPorts": [3000, 5173, 8080, 3307],
+  "postCreateCommand": "npm install --prefix backend && npm install --prefix movie-app",
+  "remoteUser": "node",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.formatOnSave": true
+      },
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint"
+      ]
+    }
+  }
+}
