@@ -4,7 +4,7 @@
 ## 기술 스택
 - Backend: Next.js 14 (App Router), TypeScript, mysql2
 - Frontend: React + Vite + TypeScript
-- DB: MySQL 8
+- DB: MySQL 8 (AWS RDS)
 - 배포/개발: Docker Compose, VS Code Dev Container
 
 ## 빠르게 실행하기 (Docker Compose, RDS 사용)
