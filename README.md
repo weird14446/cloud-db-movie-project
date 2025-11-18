@@ -7,11 +7,15 @@
 - DB: MySQL 8
 - 배포/개발: Docker Compose, VS Code Dev Container
 
-## 빠르게 실행하기 (Docker Compose)
-1. TMDB API 키를 준비하고 필요한 환경 변수를 셋업합니다.
+## 빠르게 실행하기 (Docker Compose, RDS 사용)
+1. TMDB API 키를 준비하고 RDS 연결 정보 포함 환경 변수를 셋업합니다.
    ```bash
    export TMDB_API_KEY=<TMDB에서 발급받은 키>
    export ADMIN_IMPORT_TOKEN=root-import   # 선택, 기본값 동일
+   export DB_HOST=<your-rds-endpoint>
+   export DB_USER=<rds-username>
+   export DB_PASSWORD=<rds-password>
+   export DB_NAME=<rds-database>
    ```
 2. 빌드 및 실행:
    ```bash
@@ -21,13 +25,13 @@
 3. 접속:
    - 프론트엔드: http://localhost:8080
    - 백엔드 API: http://localhost:3000
-   - MySQL: 포트 3307 (계정 `movieapp` / `moviepass`, DB `movieapp`)
-4. DB 초기화: 컨테이너에 들어가 필요한 스키마/데이터를 직접 주입합니다.
+   - MySQL(RDS): RDS 엔드포인트/포트(기본 3306)
+4. DB 초기화: RDS에 직접 접속해 필요한 스키마/데이터를 주입합니다.
    ```bash
-   docker compose exec db bash
-   mysql -u movieapp -pmoviepass movieapp < your_dump.sql
+   mysql -h <your-rds-endpoint> -P 3306 -u <user> -p<password> <db> < your_dump.sql
    ```
    참고 스크립트: `backend/sql` (제약 추가, 기본 사용자 등).
+5. 로컬 MySQL 컨테이너를 쓰지 않을 때는 `docker-compose.yml`의 `db` 서비스가 불필요하므로 주석 처리하거나 제거해도 됩니다. (백엔드의 DB_* 환경 변수를 RDS 값으로 채우는 것이 핵심입니다.)
 
 ## 로컬 개발 (컨테이너 없이)
 - Backend:
@@ -52,5 +56,5 @@
 
 ## 주요 환경 변수
 - 공통: `TMDB_API_KEY` (필수), `ADMIN_IMPORT_TOKEN` (관리용 토큰, 기본 `root-import`)
-- 백엔드: `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
+- 백엔드(필수): `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`  ← RDS 엔드포인트/계정 정보
 - 프론트엔드(Vite): `VITE_API_BASE_URL` (기본 `/api`), `VITE_TMDB_API_KEY`, `VITE_ADMIN_IMPORT_TOKEN`
