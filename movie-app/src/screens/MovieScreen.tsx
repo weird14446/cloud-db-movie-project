@@ -433,230 +433,232 @@ const MovieScreen: React.FC<MovieScreenProps> = ({
             <main className="movie-main">
                 {/* ✅ 상단 고정 영역(로고 + 로그인/로그아웃 + 검색/선호 장르) */}
                 <div className="movie-main__sticky">
-                    {/* 상단 바: 로고 + 우측 액션 */}
-                    <header className="movie-main__top">
-                        <div className="movie-main__brand">
-                            <div className="topbar-logo__mark">F</div>
-                            <div>
-                                <div className="topbar-logo__title">FilmNavi</div>
-                                <div className="topbar-logo__subtitle">
-                                    {user
-                                        ? `${user.name}님을 위한 영화 추천`
-                                        : "로그인 없이 둘러보고, 원하면 취향 설정하기"}
+                    <div className="movie-main__sticky-card">
+                        {/* 상단 바: 로고 + 우측 액션 */}
+                        <header className="movie-main__top">
+                            <div className="movie-main__brand">
+                                <div className="topbar-logo__mark">F</div>
+                                <div>
+                                    <div className="topbar-logo__title">FilmNavi</div>
+                                    <div className="topbar-logo__subtitle">
+                                        {user
+                                            ? `${user.name}님을 위한 영화 추천`
+                                            : "로그인 없이 둘러보고, 원하면 취향 설정하기"}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="movie-main__top-right">
-                            <button
-                                className="btn btn--ghost btn--sm"
-                                onClick={onOpenGenres}
-                            >
-                                선호 장르 선택
-                            </button>
-                            <button
-                                className="btn btn--ghost btn--sm"
-                                onClick={onOpenMyPage}
-                            >
-                                마이페이지
-                            </button>
-                            <button
-                                className="btn btn--ghost btn--sm"
-                                onClick={() => setShowRatingStats(true)}
-                            >
-                                평점 통계
-                            </button>
-                            {isDevUser && (
-                                <div style={{ display: "flex", gap: 8 }}>
-                                    <button
-                                        className="btn btn--primary btn--sm"
-                                        onClick={() => void onImportData()}
-                                        disabled={isImportingData || isClearingData}
-                                        style={{ minWidth: 120 }}
-                                    >
-                                        {isImportingData ? "데이터 불러오는 중..." : "데이터 불러오기"}
-                                    </button>
-                                    <button
-                                        className="btn btn--ghost btn--sm"
-                                        style={{ minWidth: 120, color: "#f87171" }}
-                                        onClick={() => void onClearData()}
-                                        disabled={isClearingData || isImportingData}
-                                    >
-                                        {isClearingData ? "데이터 비우는 중..." : "데이터 비우기"}
-                                    </button>
-                                    <button
-                                        className="btn btn--ghost btn--sm"
-                                        style={{ minWidth: 140 }}
-                                        onClick={() => void onRefreshMovies()}
-                                        disabled={
-                                            isRefreshingMovies ||
-                                            isImportingData ||
-                                            isClearingData
-                                        }
-                                    >
-                                        {isRefreshingMovies ? "정보 업데이트 중..." : "기존 영화 업데이트"}
-                                    </button>
-                                </div>
-                            )}
-
-                            {user ? (
-                                <>
-                                    <div className="user-chip">
-                                        <div className="user-chip__name">{user.name}</div>
-                                        <div className="user-chip__email">
-                                            {user.email}
-                                        </div>
-                                    </div>
-                                    <button
-                                        className="btn btn--ghost btn--sm"
-                                        onClick={onLogout}
-                                    >
-                                        로그아웃
-                                    </button>
-                                </>
-                            ) : (
+                            <div className="movie-main__top-right">
                                 <button
                                     className="btn btn--ghost btn--sm"
-                                    onClick={onOpenLogin}
+                                    onClick={onOpenGenres}
                                 >
-                                    로그인
+                                    선호 장르 선택
                                 </button>
-                            )}
-                        </div>
-                    </header>
+                                <button
+                                    className="btn btn--ghost btn--sm"
+                                    onClick={onOpenMyPage}
+                                >
+                                    마이페이지
+                                </button>
+                                <button
+                                    className="btn btn--ghost btn--sm"
+                                    onClick={() => setShowRatingStats(true)}
+                                >
+                                    평점 통계
+                                </button>
+                                {isDevUser && (
+                                    <div style={{ display: "flex", gap: 8 }}>
+                                        <button
+                                            className="btn btn--primary btn--sm"
+                                            onClick={() => void onImportData()}
+                                            disabled={isImportingData || isClearingData}
+                                            style={{ minWidth: 120 }}
+                                        >
+                                            {isImportingData ? "데이터 불러오는 중..." : "데이터 불러오기"}
+                                        </button>
+                                        <button
+                                            className="btn btn--ghost btn--sm"
+                                            style={{ minWidth: 120, color: "#f87171" }}
+                                            onClick={() => void onClearData()}
+                                            disabled={isClearingData || isImportingData}
+                                        >
+                                            {isClearingData ? "데이터 비우는 중..." : "데이터 비우기"}
+                                        </button>
+                                        <button
+                                            className="btn btn--ghost btn--sm"
+                                            style={{ minWidth: 140 }}
+                                            onClick={() => void onRefreshMovies()}
+                                            disabled={
+                                                isRefreshingMovies ||
+                                                isImportingData ||
+                                                isClearingData
+                                            }
+                                        >
+                                            {isRefreshingMovies ? "정보 업데이트 중..." : "기존 영화 업데이트"}
+                                        </button>
+                                    </div>
+                                )}
 
-                    {/* 선택한 장르 + 검색 + 개수 + 필터들 */}
-                    <div className="movie-main__header">
-                        <div>
-                            <div className="badge">Movies</div>
-                            <h2 className="card-title">
-                                선택한 장르:{" "}
-                                <span className="accent">{labelSelected}</span>
-                            </h2>
-                            <p className="card-subtitle">
-                                선호 장르를 설정하면 관련도가 높은 영화가 위에 정렬됩니다.
-                                (설정하지 않으면 전체 리스트가 노출됩니다.)
-                            </p>
-
-                            <div className="movie-main__toggles">
-                                <label className="movie-main__toggle">
-                                    <input
-                                        type="checkbox"
-                                        checked={showLikedOnly}
-                                        onChange={(e) =>
-                                            setShowLikedOnly(e.target.checked)
-                                        }
-                                    />
-                                    <span>좋아요한 영화만 보기</span>
-                                </label>
-                                <label className="movie-main__toggle">
-                                    <input
-                                        type="checkbox"
-                                        checked={showPopularOnly}
-                                        onChange={(e) =>
-                                            setShowPopularOnly(e.target.checked)
-                                        }
-                                    />
-                                    <span>인기 영화만 보기</span>
-                                </label>
-                                <label className="movie-main__toggle">
-                                    <input
-                                        type="checkbox"
-                                        checked={showReviewedOnly}
-                                        onChange={(e) =>
-                                            setShowReviewedOnly(e.target.checked)
-                                        }
-                                    />
-                                    <span>리뷰 남긴 영화만 보기</span>
-                                </label>
+                                {user ? (
+                                    <>
+                                        <div className="user-chip">
+                                            <div className="user-chip__name">{user.name}</div>
+                                            <div className="user-chip__email">
+                                                {user.email}
+                                            </div>
+                                        </div>
+                                        <button
+                                            className="btn btn--ghost btn--sm"
+                                            onClick={onLogout}
+                                        >
+                                            로그아웃
+                                        </button>
+                                    </>
+                                ) : (
+                                    <button
+                                        className="btn btn--ghost btn--sm"
+                                        onClick={onOpenLogin}
+                                    >
+                                        로그인
+                                    </button>
+                                )}
                             </div>
-                        </div>
+                        </header>
 
-                        {/* 오른쪽: 총 개수 + 검색창 + 상태/플랫폼 필터 */}
-                        <div className="movie-main__header-right">
-                            <div className="movie-main__filter-panel">
-                                <div className="movie-main__filter-controls">
-                                    <div className="pill pill--outline movie-main__count-pill">
-                                        총 <strong>{visibleMovies.length}</strong> 편
+                        {/* 선택한 장르 + 검색 + 개수 + 필터들 */}
+                        <div className="movie-main__header">
+                            <div>
+                                <div className="badge">Movies</div>
+                                <h2 className="card-title">
+                                    선택한 장르:{" "}
+                                    <span className="accent">{labelSelected}</span>
+                                </h2>
+                                <p className="card-subtitle">
+                                    선호 장르를 설정하면 관련도가 높은 영화가 위에 정렬됩니다.
+                                    (설정하지 않으면 전체 리스트가 노출됩니다.)
+                                </p>
+
+                                <div className="movie-main__toggles">
+                                    <label className="movie-main__toggle">
+                                        <input
+                                            type="checkbox"
+                                            checked={showLikedOnly}
+                                            onChange={(e) =>
+                                                setShowLikedOnly(e.target.checked)
+                                            }
+                                        />
+                                        <span>좋아요한 영화만 보기</span>
+                                    </label>
+                                    <label className="movie-main__toggle">
+                                        <input
+                                            type="checkbox"
+                                            checked={showPopularOnly}
+                                            onChange={(e) =>
+                                                setShowPopularOnly(e.target.checked)
+                                            }
+                                        />
+                                        <span>인기 영화만 보기</span>
+                                    </label>
+                                    <label className="movie-main__toggle">
+                                        <input
+                                            type="checkbox"
+                                            checked={showReviewedOnly}
+                                            onChange={(e) =>
+                                                setShowReviewedOnly(e.target.checked)
+                                            }
+                                        />
+                                        <span>리뷰 남긴 영화만 보기</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/* 오른쪽: 총 개수 + 검색창 + 상태/플랫폼 필터 */}
+                            <div className="movie-main__header-right">
+                                <div className="movie-main__filter-panel">
+                                    <div className="movie-main__filter-controls">
+                                        <div className="pill pill--outline movie-main__count-pill">
+                                            총 <strong>{visibleMovies.length}</strong> 편
+                                        </div>
+
+                                        <select
+                                            className="form-input movie-main__filter-select"
+                                            value={statusFilter}
+                                            onChange={(e) =>
+                                                setStatusFilter(e.target.value)
+                                            }
+                                        >
+                                            {STATUS_OPTIONS.map((opt) => (
+                                                <option
+                                                    key={opt.value}
+                                                    value={opt.value}
+                                                >
+                                                    {opt.label}
+                                                </option>
+                                            ))}
+                                        </select>
+
+                                        <select
+                                            className="form-input movie-main__filter-select"
+                                            value={platformFilter}
+                                            onChange={(e) =>
+                                                setPlatformFilter(
+                                                    e.target
+                                                        .value as StreamingPlatform | "all"
+                                                )
+                                            }
+                                        >
+                                            <option value="all">
+                                                모든 스트리밍 서비스
+                                            </option>
+                                            {platformOptions.map((p) => (
+                                                <option key={p} value={p}>
+                                                    {p}
+                                                </option>
+                                            ))}
+                                        </select>
+
+                                        <select
+                                            className="form-input movie-main__filter-select"
+                                            value={directorFilter}
+                                            onChange={(e) =>
+                                                setDirectorFilter(e.target.value)
+                                            }
+                                        >
+                                            <option value="all">모든 감독</option>
+                                            {directorOptions.map((director) => (
+                                                <option key={director} value={director}>
+                                                    {director}
+                                                </option>
+                                            ))}
+                                        </select>
+
+                                        <select
+                                            className="form-input movie-main__filter-select"
+                                            value={ratingFilter}
+                                            onChange={(e) => setRatingFilter(e.target.value)}
+                                        >
+                                            {RATING_FILTER_OPTIONS.map((opt) => (
+                                                <option key={opt.value} value={opt.value}>
+                                                    {opt.label}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </div>
 
-                                    <select
-                                        className="form-input movie-main__filter-select"
-                                        value={statusFilter}
+                                    <input
+                                        className="form-input movie-main__search"
+                                        placeholder="제목 / 장르 / 연도 검색"
+                                        value={searchQuery}
                                         onChange={(e) =>
-                                            setStatusFilter(e.target.value)
+                                            setSearchQuery(e.target.value)
                                         }
-                                    >
-                                        {STATUS_OPTIONS.map((opt) => (
-                                            <option
-                                                key={opt.value}
-                                                value={opt.value}
-                                            >
-                                                {opt.label}
-                                            </option>
-                                        ))}
-                                    </select>
-
-                                    <select
-                                        className="form-input movie-main__filter-select"
-                                        value={platformFilter}
-                                        onChange={(e) =>
-                                            setPlatformFilter(
-                                                e.target
-                                                    .value as StreamingPlatform | "all"
-                                            )
-                                        }
-                                    >
-                                        <option value="all">
-                                            모든 스트리밍 서비스
-                                        </option>
-                                        {platformOptions.map((p) => (
-                                            <option key={p} value={p}>
-                                                {p}
-                                            </option>
-                                        ))}
-                                    </select>
-
-                                    <select
-                                        className="form-input movie-main__filter-select"
-                                        value={directorFilter}
-                                        onChange={(e) =>
-                                            setDirectorFilter(e.target.value)
-                                        }
-                                    >
-                                        <option value="all">모든 감독</option>
-                                        {directorOptions.map((director) => (
-                                            <option key={director} value={director}>
-                                                {director}
-                                            </option>
-                                        ))}
-                                    </select>
-
-                                    <select
-                                        className="form-input movie-main__filter-select"
-                                        value={ratingFilter}
-                                        onChange={(e) => setRatingFilter(e.target.value)}
-                                    >
-                                        {RATING_FILTER_OPTIONS.map((opt) => (
-                                            <option key={opt.value} value={opt.value}>
-                                                {opt.label}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    />
                                 </div>
-
-                                <input
-                                    className="form-input movie-main__search"
-                                    placeholder="제목 / 장르 / 연도 검색"
-                                    value={searchQuery}
-                                    onChange={(e) =>
-                                        setSearchQuery(e.target.value)
-                                    }
-                                />
                             </div>
                         </div>
+                    </div>
                 </div>
-            </div>
 
             {isDevUser && (
                 <AdminMoviePanel
