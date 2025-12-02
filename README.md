@@ -6,6 +6,7 @@
 - Frontend: React + Vite + TypeScript
 - DB: MySQL 8 (AWS RDS)
 - 배포/개발: Docker Compose, VS Code Dev Container
+- 추천 알고리즘: 논문 기반 통합 모델(SVD++ + 콘텐츠) 적용. 김상화 외, “협력적 필터링과 콘텐츠 기반 필터링을 결합한 통합 추천 모델” (DBpia, NODE01746516)을 참고해 명시적 평점(리뷰)과 암묵적 피드백(좋아요), 영화 메타데이터(장르/감독/주요 출연진)를 하나의 손실 함수로 학습하는 `integrated-model.ts`를 제공합니다.
 
 ## 빠르게 실행하기 (Docker Compose, RDS 사용)
 1. TMDB API 키를 준비하고 RDS 연결 정보 포함 환경 변수를 셋업합니다.
